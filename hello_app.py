@@ -3,12 +3,12 @@ from flask_cors import CORS, cross_origin
 import base64
 import numpy as np
 from PIL import Image
-# import keras
+import keras
 
 
 all_classes = np.load('ML/classes.npy')
-# model =  keras.models.load_model('ML/nnet_v1_recognized.h5')
-# model._make_predict_function()
+model =  keras.models.load_model('ML/nnet_v1_recognized.h5')
+model._make_predict_function()
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
@@ -45,16 +45,16 @@ def predict_img():
 
     results = []
     for resample in [Image.HAMMING, 3]:
-        img = image.resize((28,28), resample=resample)
-        img = np.array(img)[:, :, 0].astype(float)
+        bbox = Image.eval(image, lambda px: 255-px).getbbox()
+        img = image.crop(bbox).resize((56, 56), resample=resample)
+        img = np.array(img)[:, :, 0]
         img = - img + img.max()
-        img /= img.max()/2
-        img = img.clip(0, 1)
-        preds = model.predict(img.reshape(1, 28, 28, 1))
+        img = img.clip(0, int(img.max()/2))
+        preds = model.predict(img.reshape(1, 56, 56, 1))
 
         if np.isnan(img).any():
             results.append('Drew something first.')
-        elif preds.max() < 0.6:
+        elif preds.max() < 0.5:
             results.append('I have no idea what you drew.')
         else:
             results.append("I'm {}% sure it's a {}.".format(
