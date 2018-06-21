@@ -2,13 +2,15 @@ from flask import Flask, render_template, request
 from flask_cors import CORS, cross_origin
 import base64
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 import keras
 
 
 all_classes = np.load('ML/classes.npy')
-model =  keras.models.load_model('ML/nnet_v1_recognized.h5')
+model =  keras.models.load_model('ML/nnet_v1.h5')
 model._make_predict_function()
+border = 2
+px = 64
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
@@ -43,15 +45,38 @@ def predict_img():
     image = Image.open('tmp/img.jpg')
 
 
+
     results = []
     for resample in [Image.HAMMING, 3]:
-        bbox = Image.eval(image, lambda px: 255-px).getbbox()
-        img = image.crop(bbox).resize((56, 56), resample=resample)
-        img = np.array(img)[:, :, 0]
-        img = - img + img.max()
-        img = img.clip(0, int(img.max()/2))
-        preds = model.predict(img.reshape(1, 56, 56, 1))
+        # Invert colors.
+        img = image.convert('L')
+        img = ImageOps.invert(img)
 
+        # Find the bounding box.
+        bbox = Image.eval(img, lambda x: x).getbbox()
+        if bbox is None:
+            return '<br>Drew something first.'
+        width = bbox[2] - bbox[0] # right minus left
+        height = bbox[3] - bbox[1] # bottom minus top
+        # Center after croping.
+        diff = width - height
+        if diff >= 0:
+            bbox = (bbox[0], bbox[1]-diff/2, bbox[2], bbox[3]+diff/2)
+        else:
+            bbox = (bbox[0]+diff/2, bbox[1], bbox[2]-diff/2, bbox[3])
+        # Add borders.
+        bbox = (bbox[0]-border, bbox[1]-border, bbox[2]+border, bbox[3]+border)
+
+        # Crop and resize.
+        img = img.crop(bbox)
+        img = img.resize((px, px), resample=resample)
+        img = np.array(img)
+
+        # Clip max values to make lines less blury.
+        img = img.clip(0, img.max()/2)
+
+
+        preds = model.predict(img.reshape(1, px, px, 1))
         if np.isnan(img).any():
             results.append('Drew something first.')
         elif preds.max() < 0.5:
