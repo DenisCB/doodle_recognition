@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
-from flask_cors import CORS, cross_origin
-import base64
-
 import numpy as np
 from PIL import Image, ImageOps
 import keras
+
+from flask import Flask, render_template, request
+from flask_cors import CORS, cross_origin
+import base64
 
 
 all_classes = np.load('ML/classes.npy')
