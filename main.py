@@ -8,8 +8,8 @@ import base64
 
 
 all_classes = np.load('ML/classes.npy')
-model =  keras.models.load_model('ML/nnet_v1.h5')
-model._make_predict_function()
+# model =  keras.models.load_model('ML/nnet_v1.h5')
+# model._make_predict_function()
 border = 2
 px = 64
 
