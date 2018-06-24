@@ -15,7 +15,7 @@ px = 64
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
-# app.config["CACHE_TYPE"] = "null"
+#app.config["CACHE_TYPE"] = "null"
 
 
 @app.route('/', methods=["POST", "GET", "OPTIONS"])
@@ -92,8 +92,6 @@ def get_some_ideas():
     return '<br>'.join(lines) + '.<br>'
 
 
-
-if __name__ == "__main__":
-    app.config["CACHE_TYPE"] = "null"
-
-    app.run()
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
