@@ -80,22 +80,6 @@ function clearCanvas() {
     draw();
 }
 
-function saveImg()
-{
-	document.getElementById("prediction_result").innerHTML = "Making prediction...";
-	var canvas = document.getElementById("Canvas");
-	var dataURL = canvas.toDataURL('image/jpg');
-	$.ajax({
-	  type: "POST",
-	  url: "/hook",
-	  data:{
-		imageBase64: dataURL
-		}
-	}).done(function(response) {
-	  console.log(response)
-	  document.getElementById("prediction_result").innerHTML = response
-	});
-}
 
 function predictImg()
 {
@@ -104,7 +88,7 @@ function predictImg()
     var dataURL = canvas.toDataURL('image/jpg');
     $.ajax({
       type: "POST",
-      url: "/predict",
+      url: "/prediction_page",
       data:{
         imageBase64: dataURL
         }
