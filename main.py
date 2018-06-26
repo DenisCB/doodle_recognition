@@ -9,10 +9,11 @@ import base64
 
 
 all_classes = np.load('ML/classes.npy')
-model =  keras.models.load_model('ML/nnet_v1.h5')
+model =  keras.models.load_model('ML/nnet_96_v1.h5')
 model._make_predict_function()
 border = 2
-px = 64
+px = 96
+global_mean = 0.0794
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
@@ -63,7 +64,7 @@ def predict_img():
 
         # Clip max values to make lines less blury.
         img /= img.max()/2
-        igm = img.clip(0, 1)
+        igm = img.clip(0, 1) - global_mean
 
 
         preds = model.predict(img.reshape(1, px, px, 1))
