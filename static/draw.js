@@ -43,7 +43,7 @@ function
 mousedown(event) {
     drawing = true;
     var location = getPosition(event);
-    context.lineWidth = 4.0;
+    context.lineWidth = 3.5;
     context.strokeStyle="#000000";
     context.beginPath();
     context.moveTo(location.x,location.y);

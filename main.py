@@ -13,7 +13,7 @@ model =  keras.models.load_model('ML/nnet_96_v1.h5')
 model._make_predict_function()
 border = 2
 px = 96
-global_mean = 0.0794
+global_mean = 0.079418
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
@@ -38,7 +38,7 @@ def predict_img():
 
 
     results = []
-    for resample in [Image.HAMMING, 3]:
+    for resample in [Image.HAMMING]:
         # Invert colors, since in PIL white is 255 and black is 0.
         img = image.convert('L')
         img = ImageOps.invert(img)
