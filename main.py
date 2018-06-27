@@ -9,7 +9,7 @@ import base64
 
 
 all_classes = np.load('ML/classes.npy')
-model =  keras.models.load_model('ML/nnet_96_v1.h5')
+model =  keras.models.load_model('ML/nnet_96_v2.h5')
 model._make_predict_function()
 border = 2
 px = 96
@@ -32,9 +32,15 @@ def predict_img():
     image_b64 = request.values['imageBase64']
     image_encoded = image_b64.split(',')[1]
     image = base64.decodebytes(image_encoded.encode('utf-8'))
-    with open('tmp/img.jpg', 'wb') as f:
+
+    files_numbers = [
+        int(f[4:-4]) for f in os.listdir('tmp/') 
+        if f.endswith('.jpg')]
+    next_filename = 'tmp/img_'+str(max(files_numbers)+1)+'.jpg'
+
+    with open(next_filename, 'wb') as f:
         f.write(image)
-    image = Image.open('tmp/img.jpg')
+    image = Image.open(next_filename)
 
 
     results = []
@@ -59,13 +65,13 @@ def predict_img():
         bbox = (bbox[0]-border, bbox[1]-border, bbox[2]+border, bbox[3]+border)
 
         # Crop and resize.
-        img = img.crop(bbox).resize((px, px), resample=resample)
+        img = img.crop(bbox)
+        img = img.resize((px, px), resample=resample)
         img = np.array(img).astype(float)
 
         # Clip max values to make lines less blury.
         img /= img.max()/2
         igm = img.clip(0, 1) - global_mean
-
 
         preds = model.predict(img.reshape(1, px, px, 1))
         if np.isnan(img).any():
