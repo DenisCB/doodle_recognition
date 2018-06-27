@@ -33,11 +33,11 @@ def predict_img():
     image_encoded = image_b64.split(',')[1]
     image = base64.decodebytes(image_encoded.encode('utf-8'))
 
-    files_numbers = [
-        int(f[4:-4]) for f in os.listdir('tmp/') 
-        if f.endswith('.jpg')]
-    next_filename = 'tmp/img_'+str(max(files_numbers)+1)+'.jpg'
-
+    # files_numbers = [
+    #     int(f[4:-4]) for f in os.listdir('tmp/') 
+    #     if f.endswith('.jpg')]
+    # next_filename = 'tmp/img_'+str(max(files_numbers)+1)+'.jpg'
+    next_filename = 'tmp/img_1.jpg'
     with open(next_filename, 'wb') as f:
         f.write(image)
     image = Image.open(next_filename)
