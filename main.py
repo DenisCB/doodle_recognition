@@ -9,11 +9,11 @@ import base64
 
 
 all_classes = np.load('ML/classes.npy')
-model =  keras.models.load_model('ML/nnet_96_v2.h5')
+model =  keras.models.load_model('ML/nnet_96_aug_v1.h5')
 model._make_predict_function()
 border = 2
 px = 96
-global_mean = 0.079418
+global_mean = 0.09752
 
 app = Flask(__name__)
 CORS(app, headers=['Content-Type'])
