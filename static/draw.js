@@ -106,7 +106,7 @@ function getIdeas()
       data:{}
     }).done(function(response) {
       console.log(response)
-      document.getElementById("get_ideas_header").innerHTML = '<br>Try one of those:<br>' 
+      document.getElementById("get_ideas_header").innerHTML = '<br>Try one of these:<br>' 
       document.getElementById("get_ideas_result").innerHTML = response
     });
     

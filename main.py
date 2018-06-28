@@ -73,15 +73,23 @@ def predict_img():
         img /= img.max()/2
         igm = img.clip(0, 1) - global_mean
 
-        preds = model.predict(img.reshape(1, px, px, 1))
-        if np.isnan(img).any():
-            results.append('Drew something first.')
-        elif preds.max() < 0.1:
-            results.append('I have no idea what you drew.')
+        preds = model.predict(img.reshape(1, px, px, 1))[0]
+        if preds.max() < 0.1:
+            res = 'I have no idea what you drew.'
+            
         else:
-            results.append("I'm {}% sure it's a {}.".format(
-                round(100*preds.max(), 1),  all_classes[preds.argmax()]))
-
+            
+            #if preds.max() > 0.9:
+            res = "I'm {}% sure it's a {}.".format(
+                round(100*preds.max(), 1), all_classes[preds.argmax()])
+            # #else:
+            # ids_sorted = preds.argsort()
+            # res += "<br><br>Or maybe one of the following:"
+            # for i in [2, 3]:
+            #     idx = ids_sorted[-i]
+            #     res += "<br>{}% - {}".format(
+            #         round(100*preds[idx], 1), all_classes[idx])
+        results.append(res)
     return '<br>'.join(results)
 
 
@@ -91,7 +99,7 @@ def get_some_ideas():
     lines = []
     line = ''
     for w in sorted(np.random.choice(all_classes, 10, False)):
-        if len(line) + len(w) >= 38:
+        if len(line) + len(w) >= 30:
             lines.append(line)
             line = ''
         line += w + ', '
