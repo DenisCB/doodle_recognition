@@ -1,38 +1,42 @@
 ﻿<!doctype html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<title>Doodle recognizer</title>
-	<link rel="stylesheet" type="text/css" href="static/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="static/style.css">
+    <meta charset="utf-8" />
+    <title>Doodle recognizer</title>
+    <link rel="stylesheet" type="text/css" href="static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/style.css">
 </head>
 
-	<body>
+    <body>
 
-		<div  class="container" align="center">
-			<div>
+        <div  class="container" align="center">
+            <div>
                 <h4>Draw anything you want</h4>
-				<canvas id="Canvas" width="256" height="256"></canvas>
-
+                <canvas id="Canvas" width="260" height="260"></canvas>
                 <div  class="wraper" align='center'>
-    				<button type="button" class="btn btn-default my_button" onclick="clearCanvas()"><strong>Clear</strong></button>
-    				<button type="button" class="btn btn-default my_button" id="save" onclick="predictImg()">
-                        <strong>Guess it!</strong></button>
+
+                    <button type="button" class="btn btn-default my_button" onclick="start_drawing()">Draw</button>
+                    <button type="button" class="btn btn-default my_button" id="save" onclick="start_erasing()">Erase</button>
+                    <button type="button" class="btn btn-default my_button" onclick="clear_canvas()">Clear</button>
                     <br>
-                    <button type="button" class="btn btn-default my_button" id="get_ideas" onclick="getIdeas()" 
-                            style="width:256px"><strong>Give me some ideas</strong></button>
+                    <button type="button" class="btn btn-default my_button" id="get_ideas" onclick="get_ideas()" style="width:260px">Give me some ideas</button>
+                    <br>
+                    <button type="button" class="btn btn-default my_button" id="save" onclick="predict_img()" style="width:260px"><strong>Guess it!</strong></button>
                 </div>
-			</div>
+            </div>
 
             <div class="wraper" align='left'> 
                 <FONT id="get_ideas_header" SIZE="4"></FONT>
                 <FONT id="get_ideas_result" SIZE="3"></FONT>
                 <br>
-				<h4 id="prediction_result"></h4>
-			</div>
-		</div>
-		<script src="static/jquery.min.js"></script>
-		<script src="static/bootstrap.min.js"></script>
-		<script src="static/draw.js"></script>
-	</body>
+                <h4 id="prediction_result"></h4>
+            </div>
+        </div>
+
+        <script src="static/jquery.min.js"></script>
+        <script src="static/bootstrap.min.js"></script>
+        <script src="static/draw.js"></script>
+        <script src="static/buttons.js"></script>
+
+    </body>
 </html>

@@ -10,14 +10,14 @@ body
 {
 	border:1px solid #999;
     border-radius: 4px;
-    width: 256; height: 256;
+    width: 260px; height: 260px;
     cursor: crosshair;
 }
 .my_button
 {
     margin: 0px 0px 5px 0px;
     border-radius: 4px;
-    width: 126px;
+    width: 84px; /*126*/
     font-size: 16px;
     cursor: pointer;
 }
@@ -25,7 +25,7 @@ body
 /*Aligns text relatively to parent div*/
 .wraper {
     position: relative;
-    width: 256px;
+    width: 260px;
     margin:0 auto;   
 }
 

@@ -3,6 +3,9 @@ var drawing = false;
 var context;
 var offset_left = 0;
 var offset_top = 0;
+var canvas_size = 260;
+var eraser_active = false;
+var linewidth = 4
 
 function start_canvas () {
     var canvas = document.getElementById ("Canvas");
@@ -43,8 +46,14 @@ function
 mousedown(event) {
     drawing = true;
     var location = getPosition(event);
-    context.lineWidth = 4.0;
-    context.strokeStyle="#000000";
+    if (eraser_active) {
+        context.strokeStyle="#ffffff";
+        context.lineWidth = 3 * linewidth;
+    }
+    else {
+        context.strokeStyle="#000000";
+        context.lineWidth = linewidth;
+    }
     context.beginPath();
     context.moveTo(location.x,location.y);
 }
@@ -59,7 +68,6 @@ mousemove(event) {
 }
 
 
-
 function
 mouseup(event) {
     if (!drawing) 
@@ -71,46 +79,24 @@ mouseup(event) {
 
 function draw() {
     context.fillStyle = '#ffffff';
-    context.fillRect(0, 0, 256, 256);
+    context.fillRect(0, 0, canvas_size, canvas_size);
 }
 
 
-function clearCanvas() {
-    context.clearRect (0, 0, 256, 256);
+function clear_canvas() {
+    document.getElementById('get_ideas_header').innerHTML = '';
+    document.getElementById('get_ideas_result').innerHTML = '';
+    document.getElementById("prediction_result").innerHTML = '';
+    context.clearRect (0, 0, canvas_size, canvas_size);
     draw();
 }
 
-
-function predictImg()
-{
-    document.getElementById("prediction_result").innerHTML = "Making prediction...";
-    var canvas = document.getElementById("Canvas");
-    var dataURL = canvas.toDataURL('image/jpg');
-    $.ajax({
-      type: "POST",
-      url: "/prediction_page",
-      data:{
-        imageBase64: dataURL
-        }
-    }).done(function(response) {
-      console.log(response)
-      document.getElementById("prediction_result").innerHTML = response
-    });
+function start_drawing() {
+    eraser_active = false;
 }
 
-function getIdeas()
-{
-    $.ajax({
-      type: "POST",
-      url: "/get_ideas",
-      data:{}
-    }).done(function(response) {
-      console.log(response)
-      document.getElementById("get_ideas_header").innerHTML = '<br>Try one of these:<br>' 
-      document.getElementById("get_ideas_result").innerHTML = response
-    });
-    
+function start_erasing() {
+    eraser_active = true;
 }
-
 
 onload = start_canvas;

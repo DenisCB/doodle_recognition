@@ -1,7 +1,6 @@
-*.csv
-*.bin
-ML/data/
 .ipynb_checkpoints
 .DS_Store
 __pycache__/
+
+ML/data/
 venv/
