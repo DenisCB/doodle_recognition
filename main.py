@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 from model.predictor import Predictor
 # from flask_cors import CORS, cross_origin
