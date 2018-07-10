@@ -2,6 +2,8 @@ import numpy as np
 from PIL import Image, ImageOps
 import keras
 import base64
+from ML.torch_models import InceptionBasedNet
+import torch
 
 
 class Predictor(object):
@@ -12,6 +14,13 @@ class Predictor(object):
         self.mean_global = np.load(path+'mean_global.npy')[0]
         self.model = keras.models.load_model(path+'nnet_96_aug_v1.h5')
         self.model._make_predict_function()
+
+        self.torch_model = InceptionBasedNet(self.all_classes.shape[0], (1, self.px, self.px))
+        self.torch_model.load_state_dict(
+            torch.load(
+                path+'InceptionBasedNet.t7',
+                map_location='cpu'))
+        self.torch_model.eval()
         self.image = None
 
     def decode_image(self, request):
@@ -54,16 +63,21 @@ class Predictor(object):
 
         # Clip max values to make lines less blury.
         img /= img.max()/2
-        img = img.clip(0, 1) - self.mean_global
-
-        # Reshape for nnet input.
-        self.image = img.reshape(1, self.px, self.px, 1)
+        self.image = img.clip(0, 1) - self.mean_global
 
     def predict_image(self):
         if self.image is None:
             return 'Draw something first.'
 
-        preds = self.model.predict(self.image)[0]
+        mode = 'torch'
+        if mode == 'keras':
+            img = self.image.reshape(1, self.px, self.px, 1)
+            preds = self.model.predict(img)[0]
+        elif mode == 'torch':
+            img = self.image.reshape(1, 1, self.px, self.px)
+            img = torch.Tensor(img)
+            preds = self.torch_model(img).detach().numpy()
+
         if preds.max() < 0.1:
             res = 'I have no idea what you drew.'
         else:
