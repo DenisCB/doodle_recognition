@@ -8,7 +8,8 @@ from helpers import im2arr
 class Trainer(object):
 
     def __init__(
-        self, model, loss_fn, optimizer, cpu_count, mean_global, px, model_name, torch_dtype
+        self, model, loss_fn, optimizer, cpu_count, mean_global, px,
+        model_name, torch_dtype
     ):
         self.model = model
         self.loss_fn = loss_fn

@@ -15,7 +15,8 @@ class Predictor(object):
         self.model = keras.models.load_model(path+'nnet_96_aug_v1.h5')
         self.model._make_predict_function()
 
-        self.torch_model = InceptionBasedNet(self.all_classes.shape[0], (1, self.px, self.px))
+        self.torch_model = InceptionBasedNet(
+            self.all_classes.shape[0], (1, self.px, self.px))
         self.torch_model.load_state_dict(
             torch.load(
                 path+'InceptionBasedNet.t7',
@@ -69,21 +70,27 @@ class Predictor(object):
         if self.image is None:
             return 'Draw something first.'
 
-        mode = 'torch'
-        if mode == 'keras':
-            img = self.image.reshape(1, self.px, self.px, 1)
-            preds = self.model.predict(img)[0]
-        elif mode == 'torch':
-            img = self.image.reshape(1, 1, self.px, self.px)
-            img = torch.Tensor(img)
-            preds = self.torch_model(img).detach().numpy()
+        result = []
+        for mode in ['Keras', 'Torch']:
+            if mode == 'Keras':
+                nnet_name = 'Keras, convolution nnet'
+                img = self.image.reshape(1, self.px, self.px, 1)
+                preds = self.model.predict(img)[0]
+            elif mode == 'Torch':
+                nnet_name = 'Torch, Inception v3 nnet'
+                img = self.image.reshape(1, 1, self.px, self.px)
+                img = torch.Tensor(img)
+                preds = self.torch_model(img).detach().numpy()
 
-        if preds.max() < 0.1:
-            res = 'I have no idea what you drew.'
-        else:
-            res = "I'm {}% sure it's a {}.".format(
-                round(100*preds.max(), 1), self.all_classes[preds.argmax()])
-        return res
+            res = nnet_name + ':<br>'
+            if preds.max() < 0.1:
+                res += "I have no idea what you drew."
+            else:
+                res += "I'm {}% sure it's a {}.".format(
+                    round(100*preds.max(), 1), self.all_classes[preds.argmax()]
+                    )
+            result.append(res+'<br>')
+        return "<br>".join(result)
 
     def get_classes_example(self, num_classes):
         return sorted(np.random.choice(self.all_classes, num_classes, False))
