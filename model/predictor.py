@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image, ImageOps
 import keras
 import base64
+import io
 
 
 class Predictor(object):
@@ -17,10 +18,13 @@ class Predictor(object):
     def decode_image(self, request):
         image = request.values['image'].split(',')[1]
         image = base64.decodebytes(image.encode('utf-8'))
-        filename = 'tmp/img_1.jpg'
-        with open(filename, 'wb') as f:
-            f.write(image)
-        image = Image.open(filename)
+        image = Image.open(io.BytesIO(image))
+
+        # filename = 'tmp/img_1.jpg'
+        # with open(filename, 'wb') as f:
+        #     f.write(image)
+        # image = Image.open(filename)
+
         self.image = image
 
     def process_image(self):
@@ -45,7 +49,8 @@ class Predictor(object):
         # Add borders.
         bbox = (
             bbox[0]-self.border_px, bbox[1]-self.border_px,
-            bbox[2]+self.border_px, bbox[3]+self.border_px)
+            bbox[2]+self.border_px, bbox[3]+self.border_px
+        )
 
         # Crop and resize.
         img = img.crop(bbox)
@@ -67,8 +72,7 @@ class Predictor(object):
         else:
             res = "I'm {}% sure it's a {}.".format(
                 round(100*preds.max(), 1), self.all_classes[preds.argmax()]
-                )
-        res += '<br>'
+            )
         return res
 
     def get_classes_example(self, num_classes):
