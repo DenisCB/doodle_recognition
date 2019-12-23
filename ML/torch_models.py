@@ -50,7 +50,9 @@ class InceptionBasedNet(nn.Module):
 
         num_features = np.prod(self.layer2.out_dim)
         self.linear1 = linear_layer(num_features, 64, True, True, 0.05)
-        self.linear2 = nn.Linear(in_features=self.linear1.out_dim, out_features=num_classes)
+        self.linear2 = nn.Linear(
+            in_features=self.linear1.out_dim,
+            out_features=num_classes)
         self.softmax = nn.Softmax(1)
 
     def forward(self, x):

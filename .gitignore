@@ -1,5 +1,8 @@
 .ipynb_checkpoints
 .DS_Store
+.keras/
+
+
 __pycache__/
 
 ML/data/
