@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_DEBUG=1
+      - FLASK_APP=main.py
+      - PYTHONUNBUFFERED=True
+    ports:
+      - 5000:5001
+    command: flask run --host=0.0.0.0 --port=5001 # for debugging
+    # command: gunicorn -w 1 -b 0.0.0.0:5001 main:app 
+    container_name: doodles
+    volumes:
+      - .:/root
+      
+  # db:
+  #   image: postgres
+  #   environment:
+  #     - DB_USER=denis
+  #     - DB_name=doodles_db
+  #   restart: always
+  #   ports:
+  #     - "5432:5432"
