@@ -1,9 +1,11 @@
 .ipynb_checkpoints
 .DS_Store
 .keras/
-aws_key.pem
-
+.python_history
 __pycache__/
 
+aws_key.pem
+env.sh
+
+pgdata/
 ML/data/
-venv/
