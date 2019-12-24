@@ -25,3 +25,5 @@ services:
     ports:
       - "5433:5432" # 5433 is exposed to localhost, but not to other docker apps
     container_name: doodles_db
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
