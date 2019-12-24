@@ -1,7 +1,7 @@
 .ipynb_checkpoints
 .DS_Store
 .keras/
-
+aws_key.pem
 
 __pycache__/
 
