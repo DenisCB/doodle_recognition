@@ -4,20 +4,22 @@ docker build -t my_notebook .
 docker run -p 8888:8888 -v /Users/Denis/ML/hellodocker:/home/jovyan my_notebook # will use Dockerfile
 
 
-docker-compose up
 docker-compose up --build
 
 docker ps
 
 
 
-docker exec -it doodles_db_1 bash
+docker exec -it doodles bash
 psql -h localhost -U denis -d doodles_db -p 5432
 
 
 psql -p 5432 -d postgres
 
+docker exec -it doodles_db psql -p5432 -U denis -d doodles
 
+
+# AWS deploy
 
 ssh -i "aws_key.pem" ec2-user@ec2-35-158-1-65.eu-central-1.compute.amazonaws.com
 

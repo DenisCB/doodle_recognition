@@ -67,13 +67,16 @@ class Predictor(object):
 
         img = self.image.reshape(1, self.px, self.px, 1)
         preds = self.model.predict(img)[0]
-        if preds.max() < 0.1:
-            res = "I have no idea what you drew."
+
+        confidence = preds.max()
+        predicted_label = self.all_classes[preds.argmax()]
+        if confidence < 0.1:
+            message = "I have no idea what you drew."
         else:
-            res = "I'm {}% sure it's a {}.".format(
-                round(100*preds.max(), 1), self.all_classes[preds.argmax()]
+            message = "I'm {}% sure it's a {}.".format(
+                round(100*confidence, 1), predicted_label
             )
-        return res
+        return predicted_label, confidence, message
 
     def get_classes_example(self, num_classes):
         return sorted(np.random.choice(self.all_classes, num_classes, False))

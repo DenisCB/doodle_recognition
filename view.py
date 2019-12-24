@@ -1,6 +1,9 @@
 from app import app
 from flask import render_template, request
 from model.predictor import Predictor
+from models import Drawing
+from app import db
+
 
 predictor = Predictor(path='model/')
 
@@ -14,8 +17,16 @@ def main_page():
 def predict_img():
     predictor.decode_image(request)
     predictor.process_image()
-    result = predictor.predict_image()
-    return result
+    predicted_label, confidence, message = predictor.predict_image()
+
+    drawing = Drawing(
+        predicted_label=predicted_label,
+        confidence=confidence
+    )
+    db.session.add(drawing)
+    db.session.commit()
+
+    return message
 
 
 @app.route('/get_ideas', methods=["POST"])
