@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request
 from model.predictor import Predictor
-from models import Drawing
+from models import Drawings
 from app import db
 
 
@@ -19,9 +19,9 @@ def predict_img():
     predictor.process_image()
     predicted_label, confidence, message = predictor.predict_image()
 
-    drawing = Drawing(
+    drawing = Drawings(
         predicted_label=predicted_label,
-        confidence=confidence
+        confidence=float(confidence)
     )
     db.session.add(drawing)
     db.session.commit()
