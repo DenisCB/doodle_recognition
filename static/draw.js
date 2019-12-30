@@ -44,6 +44,8 @@ function getPosition(evt) {
 
 function
 mousedown(event) {
+    document.getElementById("prediction_result").innerHTML = '';
+    document.getElementById("correct_or_not_choice").innerHTML = '';
     drawing = true;
     var location = getPosition(event);
     if (eraser_active) {
@@ -87,6 +89,7 @@ function clear_canvas() {
     document.getElementById('get_ideas_header').innerHTML = '';
     document.getElementById('get_ideas_result').innerHTML = '';
     document.getElementById("prediction_result").innerHTML = '';
+    document.getElementById("correct_or_not_choice").innerHTML = '';
     context.clearRect (0, 0, canvas_size, canvas_size);
     draw();
 }

@@ -13,19 +13,14 @@ class Predictor(object):
         self.mean_global = np.load(path+'mean_global.npy')[0]
         self.model = keras.models.load_model(path+'nnet_96_aug_v1.h5')
         self.model._make_predict_function()
+        self.src_image = None
         self.image = None
 
     def decode_image(self, request):
         image = request.values['image'].split(',')[1]
         image = base64.decodebytes(image.encode('utf-8'))
-        image = Image.open(io.BytesIO(image))
-
-        # filename = 'tmp/img_1.jpg'
-        # with open(filename, 'wb') as f:
-        #     f.write(image)
-        # image = Image.open(filename)
-
-        self.image = image
+        self.src_image = image
+        self.image = Image.open(io.BytesIO(image))
 
     def process_image(self):
         # Invert colors, since in PIL white is 255 and black is 0.
@@ -63,7 +58,10 @@ class Predictor(object):
 
     def predict_image(self):
         if self.image is None:
-            return 'Draw something first.'
+            predicted_label = 'empty canvas'
+            confidence = 0.0
+            message = 'Draw something first.'
+            return predicted_label, confidence, message
 
         img = self.image.reshape(1, self.px, self.px, 1)
         preds = self.model.predict(img)[0]
