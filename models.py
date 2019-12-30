@@ -23,3 +23,7 @@ class Drawings(db.Model):
             self.id, self.predicted_label, round(self.confidence, 3),
             self.s3_filename
         )
+
+    @classmethod
+    def max_id(self):
+        return db.session.query(db.func.max(Drawings.id)).first()[0]

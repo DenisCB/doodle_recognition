@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wraper" align='center'>
+    <a href="{{ url_for('what_others_drew') }}">
+        <button       
+            type="button" 
+            class="btn btn-default my_button"
+            style="width:260px">
+            Show more
+        </button>
+    </a>
+        {% for drawing in drawings %}
+            <h4>{{ drawing.predicted_label }}</h4>
+            <img 
+                src="https://doodles-bucket.s3.eu-central-1.amazonaws.com/{{ drawing.s3_filename }}"
+                title="{{ drawing.predicted_label }}">
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}
