@@ -8,13 +8,13 @@ services:
       - FLASK_DEBUG=1
       - FLASK_APP=main.py
       - PYTHONUNBUFFERED=True
-      - AWSAccessKeyId=${AWSAccessKeyId} # from env.sh
-      - AWSSecretKey=${AWSSecretKey}
-      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+      - AWSAccessKeyId=${AWSAccessKeyId}  # from env.sh
+      - AWSSecretKey=${AWSSecretKey}  # from env.sh
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}  # from env.sh
     ports:
       - 5000:5001
-    command: flask run --host=0.0.0.0 --port=5001 # for debugging
-    # command: gunicorn -w 1 -b 0.0.0.0:5001 main:app # for deployment
+    command: flask run --host=0.0.0.0 --port=5001  # uncomment for debugging
+    # command: gunicorn -w 1 -b 0.0.0.0:5001 main:app # uncomment for deployment
     container_name: doodles
     volumes:
       - .:/root
