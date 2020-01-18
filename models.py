@@ -9,9 +9,10 @@ def generate_filename():
 
 class Drawings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    actual_label = db.Column(db.String(100), nullable=True)
     predicted_label = db.Column(db.String(100), nullable=True)
     confidence = db.Column(db.Float)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    created_at = db.Column(db.DateTime, default=db.func.now())
     s3_filename = db.Column(db.String(100), nullable=True)
 
     def __init__(self, *args, **kwargs):
