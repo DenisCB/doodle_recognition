@@ -46,6 +46,7 @@ function
 mousedown(event) {
     document.getElementById("prediction_result").innerHTML = '';
     document.getElementById("correct_or_not_choice").innerHTML = '';
+    document.getElementById("fill_actual_label_form").innerHTML = '';
     drawing = true;
     var location = getPosition(event);
     if (eraser_active) {
@@ -86,10 +87,11 @@ function draw() {
 
 
 function clear_canvas() {
-    document.getElementById('get_ideas_header').innerHTML = '';
-    document.getElementById('get_ideas_result').innerHTML = '';
+    document.getElementById("get_ideas_header").innerHTML = '';
+    document.getElementById("get_ideas_result").innerHTML = '';
     document.getElementById("prediction_result").innerHTML = '';
     document.getElementById("correct_or_not_choice").innerHTML = '';
+    document.getElementById("fill_actual_label_form").innerHTML = '';
     context.clearRect (0, 0, canvas_size, canvas_size);
     draw();
 }
