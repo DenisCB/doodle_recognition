@@ -15,6 +15,11 @@ def main_page():
     return render_template('index.html')
 
 
+@app.route('/about', methods=["GET"])
+def about():
+    return render_template('about.html')
+
+
 @app.route('/prediction_page', methods=["POST"])
 def predict_img():
     predictor.decode_image(request)
@@ -43,7 +48,15 @@ def get_some_ideas():
 
 @app.route('/save_img', methods=["POST"])
 def save_img():
+    print(request.values['predicted_label'])
+    print(request.values['confidence'])
+    print(request.values['actual_label'] or request.values['predicted_label'])
+
     drawing = Drawings(
+        actual_label=(
+            request.values['actual_label']
+            or request.values['predicted_label']
+        ),
         predicted_label=request.values['predicted_label'],
         confidence=float(request.values['confidence'])
     )
@@ -53,21 +66,35 @@ def save_img():
     predictor.decode_image(request)
     bucket_helper.upload_img(predictor.src_image, drawing.s3_filename)
 
-    return 'Saved'
+    return ''
 
 
-@app.route('/drawings', methods=["GET"])
-def what_others_drew():
+@app.route('/drawings/<kind>', methods=["GET"])
+def what_others_drew(kind):
+    # kind is either recent or random
     num_drawings = 4
     max_id = Drawings.max_id()
-    ids_selected, drawings = [], []
-    while len(drawings) < num_drawings:
-        id = np.random.randint(49, max_id+1)
-        if id in ids_selected:
-            continue
-        drawing = Drawings.query.get(id)
-        if drawing and drawing.s3_filename and 'None' not in drawing.s3_filename:
-            drawings.append(drawing)
-            ids_selected.append(id)
+    drawings = {}
 
-    return render_template('drawings.html', drawings=drawings)
+    def add_if_valid(drawings, id):
+        if id in drawings:
+            return False
+        drawing = Drawings.query.get(id)
+        if (
+            drawing
+            and drawing.s3_filename
+            and 'None' not in drawing.s3_filename
+        ):
+            drawings[id] = drawing
+        return drawings
+
+    if kind == 'random':
+        while len(drawings) < num_drawings:
+            id = np.random.randint(49, max_id+1)
+            drawings = add_if_valid(drawings, id)
+    elif kind == 'recent':
+        id = max_id
+        while len(drawings) < num_drawings:
+            drawings = add_if_valid(drawings, id)
+            id -= 1
+    return render_template('drawings.html', drawings=drawings.values())

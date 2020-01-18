@@ -2,14 +2,22 @@
 
 {% block content %}
 <div class="wraper" align='center'>
-    <a href="{{ url_for('what_others_drew') }}">
+    <a href="{{ url_for('what_others_drew', kind='random') }}">
         <button       
             type="button" 
             class="btn btn-default my_button"
-            style="width:260px">
-            Show more
-        </button>
+            style="width:126px">
+            Show random</button>
     </a>
+    <a href="{{ url_for('what_others_drew', kind='recent') }}">
+        <button       
+            type="button" 
+            class="btn btn-default my_button"
+            style="width:126px">
+            Show recent</button>
+    </a>
+    <div class="wraper" align='center'>
+
         {% for drawing in drawings %}
             <h4>{{ drawing.predicted_label }}</h4>
             <img 
@@ -18,6 +26,5 @@
         {% endfor %}
     </div>
 </div>
-
 
 {% endblock content %}
