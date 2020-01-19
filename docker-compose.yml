@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.5"
 services:
   flask:
     build:
@@ -13,8 +13,8 @@ services:
       - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}  # from env.sh
     ports:
       - 5000:5001
-    command: flask run --host=0.0.0.0 --port=5001  # uncomment for debugging
-    # command: gunicorn -w 1 -b 0.0.0.0:5001 main:app # uncomment for deployment
+    # command: flask run --host=0.0.0.0 --port=5001  # uncomment for debugging
+    command: gunicorn -w 1 -b 0.0.0.0:5001 main:app # uncomment for deployment
     container_name: doodles
     volumes:
       - .:/root

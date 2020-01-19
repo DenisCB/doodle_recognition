@@ -3,7 +3,11 @@ import datetime
 
 
 def generate_filename():
-    max_id = Drawings.query.order_by(-Drawings.id).first().id + 1
+    last_obj = Drawings.query.order_by(-Drawings.id).first()
+    if last_obj:
+        max_id = last_obj.id + 1
+    else:
+        max_id = 1
     return 'doodles/{}_{}.jpg'.format(max_id, datetime.datetime.now())
 
 
