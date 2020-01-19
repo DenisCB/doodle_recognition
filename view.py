@@ -72,25 +72,26 @@ def save_img():
 @app.route('/drawings/<kind>', methods=["GET"])
 def what_others_drew(kind):
     # kind is either recent or random
-    num_drawings = 4
+    num_drawings = 6
     max_id = Drawings.max_id()
     drawings = {}
 
     def add_if_valid(drawings, id):
         if id in drawings:
-            return False
+            return drawings
         drawing = Drawings.query.get(id)
         if (
             drawing
             and drawing.s3_filename
             and 'None' not in drawing.s3_filename
+            and drawing.s3_filename != ''
         ):
             drawings[id] = drawing
         return drawings
 
     if kind == 'random':
         while len(drawings) < num_drawings:
-            id = np.random.randint(49, max_id+1)
+            id = np.random.randint(1, max_id+1)
             drawings = add_if_valid(drawings, id)
     elif kind == 'recent':
         id = max_id

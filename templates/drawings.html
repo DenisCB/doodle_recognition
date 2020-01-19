@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="wraper" align='center'>
+<div class="wraper" align='center' style="width:500px">
     <a href="{{ url_for('what_others_drew', kind='random') }}">
         <button       
             type="button" 
@@ -16,15 +16,24 @@
             style="width:126px">
             Show recent</button>
     </a>
-    <div class="wraper" align='center'>
+</div>
 
-        {% for drawing in drawings %}
-            <h4>{{ drawing.predicted_label }}</h4>
-            <img 
-                src="https://doodles-bucket.s3.eu-central-1.amazonaws.com/{{ drawing.s3_filename }}"
-                title="{{ drawing.predicted_label }}">
-        {% endfor %}
-    </div>
+<div class="wraper" align='left' style="width:530px">
+    {% for drawing in drawings %}
+          <div class="row no-gutters" style="width:530px; height:260px" >
+            <div class="col-6" >
+                <img
+                    src="https://doodles-bucket.s3.eu-central-1.amazonaws.com/{{ drawing.s3_filename }}"
+                    title="{{ drawing.predicted_label }}">
+            </div>
+            <div class="col-5"  align="left">
+                <FONT SIZE="40"></FONT><br>
+                <FONT SIZE="3"> Predicted label: {{ drawing.predicted_label }} </FONT><br>
+                <FONT SIZE="3"> Confidence: {{ drawing.confidence | round(3) }} </FONT><br>
+                <FONT SIZE="3"> Actual label: {{ drawing.actual_label }} </FONT><br>
+            </div>
+          </div>
+    {% endfor %}
 </div>
 
 {% endblock content %}
