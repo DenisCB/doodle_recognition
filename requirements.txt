@@ -19,7 +19,7 @@ h5py==2.8.0
 html5lib==0.9999999
 image==1.5.24
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 jmespath==0.9.4
 Keras==2.2.0
 Keras-Applications==1.0.2
