@@ -35,7 +35,7 @@ psycopg2-binary==2.8.4
 python-dateutil==2.8.1
 python-editor==1.0.4
 pytz==2018.4
-PyYAML==3.12
+PyYAML==5.4
 s3transfer==0.2.1
 scipy==1.1.0
 six==1.11.0
