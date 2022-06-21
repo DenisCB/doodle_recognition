@@ -27,7 +27,7 @@ Keras-Preprocessing==1.0.1
 Mako==1.1.0
 Markdown==2.6.11
 MarkupSafe==1.0
-numpy==1.14.5
+numpy==1.22.0
 pandas==0.25.3
 Pillow==5.1.0
 protobuf==3.6.0
