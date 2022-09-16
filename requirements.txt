@@ -24,7 +24,7 @@ jmespath==0.9.4
 Keras==2.2.0
 Keras-Applications==1.0.2
 Keras-Preprocessing==1.0.1
-Mako==1.1.0
+Mako==1.2.2
 Markdown==2.6.11
 MarkupSafe==1.0
 numpy==1.14.5
